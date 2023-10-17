@@ -127,12 +127,10 @@ public class GraphCommandService extends Thread {
     // load nodes
     if (cmd.nodesFilepath != null) {
       File file = new File(cmd.nodesFilepath);
-      if (file.exists()) {
-        Container container = importController.importFile(file);
-        Processor processor = Lookup.getDefault().lookup(Processor.class);
-        container.getLoader().setEdgesMergeStrategy(EdgeMergeStrategy.NO_MERGE);
-        importController.process(container, processor, workspace);
-      }
+      Container container = importController.importFile(file);
+      Processor processor = Lookup.getDefault().lookup(Processor.class);
+      container.getLoader().setEdgesMergeStrategy(EdgeMergeStrategy.NO_MERGE);
+      importController.process(container, processor, workspace);
     }
 
     // load nodes
