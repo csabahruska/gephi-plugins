@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: ESTGi DAP VSCode
+OpenIDE-Module-Short-Description: Integration with VSCode and External STG Interpreter to visualize heap and call graphs.
+OpenIDE-Module-Long-Description: Integration with VSCode and External STG Interpreter to visualize heap and call graphs.
+OpenIDE-Module-Display-Category: Tool
