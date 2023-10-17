@@ -133,7 +133,7 @@ public class GraphCommandService extends Thread {
       importController.process(container, processor, workspace);
     }
 
-    // load nodes
+    // load edges
     File file = new File(cmd.edgesFilepath);
     Container container = importController.importFile(file);
     Processor processor = Lookup.getDefault().lookup(Processor.class);
