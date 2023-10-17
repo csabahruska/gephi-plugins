@@ -71,6 +71,7 @@ public class GraphCommandService extends Thread {
   public void run() {
     while (true) {
       try {
+        // HINT: auto connect loop
 
         Thread.sleep(500); // milliseconds
         connectGraphServer();
@@ -87,6 +88,7 @@ public class GraphCommandService extends Thread {
     Protocol protocol = new Protocol();
     Gson gson = new Gson();
     while (true) {
+      // HINT: request serve loop, in case of disconnect exception the auto connect loop will reconnect
       String cmdStr = protocol.decode(input);
       System.out.println("request: " + cmdStr);
       Command.GenericRequest cmd = gson.fromJson(cmdStr, Command.GenericRequest.class);
