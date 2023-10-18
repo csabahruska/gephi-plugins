@@ -13,6 +13,11 @@ public class Command {
     String title;
   }
 
+  public static class SelectNodeRequest {
+    String request;
+    String nodeId;
+  }
+
  public static class ShowValueEvent {
     String event;
     String nodeId;

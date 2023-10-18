@@ -48,6 +48,16 @@ public class GraphCommandService extends Thread {
   int port = 4721;
 
   GraphCommandService() {
+    // override default values
+    String value = System.getenv("DAP_HOST");
+    if (value != null) {
+      hostname = value;
+    }
+    value = System.getenv("DAP_GRAPH_PORT");
+    if (value != null) try {
+      port = Integer.parseInt(value);
+    } catch (Exception ex) {};
+
     this.workspace = null;
   }
 
@@ -96,10 +106,25 @@ public class GraphCommandService extends Thread {
         case "loadGraph":
           evalLoadGraph(gson.fromJson(cmdStr, Command.LoadGraphRequest.class));
           break;
+        case "selectNode":
+          evalSelectNode(gson.fromJson(cmdStr, Command.SelectNodeRequest.class));
+          break;
 
         default:
           System.out.println("unknown request: " + cmd.request);
       }
+    }
+  }
+
+  void evalSelectNode(Command.SelectNodeRequest cmd) throws Exception {
+    Node n = Lookup.getDefault().lookup(GraphController.class)
+              .getGraphModel() // use the currently active workspace
+              .getGraph()
+              .getNode(cmd.nodeId);
+    if (n != null) {
+      VizController.getInstance().resetSelection();
+      VizController.getInstance().selectNode(n);
+      VizController.getInstance().centerOnNode(n);
     }
   }
 
@@ -142,14 +167,6 @@ public class GraphCommandService extends Thread {
 
     VizController.getInstance().refreshWorkspace();
 
-    /*
-    for (Node n : graph.getNodes()) {
-      n.setColor(ImportUtils.parseColor((String)n.getAttribute("color")));
-    }
-    for (Edge e : graph.getEdges()) {
-      e.setColor(ImportUtils.parseColor((String)e.getAttribute("color")));
-    }
-    */
     // show labels
     VizController.getInstance().getVizModel().getTextModel().setShowEdgeLabels(true);
     VizController.getInstance().getVizModel().getTextModel().setShowNodeLabels(true);
