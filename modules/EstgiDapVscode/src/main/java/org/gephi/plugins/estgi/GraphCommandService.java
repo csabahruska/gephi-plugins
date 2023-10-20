@@ -173,17 +173,6 @@ public class GraphCommandService extends Thread {
     VizController.getInstance().getVizModel().getTextModel().setNodeSizeFactor(0.1f);
     VizController.getInstance().getVizModel().setEdgeScale(6.0f);
 
-    // apply layout
-    AutoLayout autoLayout = new AutoLayout(2, TimeUnit.SECONDS);
-    autoLayout.setGraphModel(Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace));
-    autoLayout.addLayout(Lookup.getDefault().lookup(ForceAtlas2Builder.class).buildLayout(), 0.2f);
-    autoLayout.addLayout(Lookup.getDefault().lookup(YifanHu.class).buildLayout(), 0.6f);
-    autoLayout.addLayout(Lookup.getDefault().lookup(LabelAdjustBuilder.class).buildLayout(), 0.2f);
-    autoLayout.execute();
-
-    // zoom out to the full graph
-    VizController.getInstance().getGraphIO().centerOnGraph();
-
     // set layout UI default value
     LayoutController lc = Lookup.getDefault().lookup(LayoutController.class);
     lc.setLayout(Lookup.getDefault().lookup(YifanHu.class).buildLayout());
@@ -228,5 +217,15 @@ public class GraphCommandService extends Thread {
       }
     }
 
+    // apply layout
+    AutoLayout autoLayout = new AutoLayout(2, TimeUnit.SECONDS);
+    autoLayout.setGraphModel(Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace));
+    autoLayout.addLayout(Lookup.getDefault().lookup(ForceAtlas2Builder.class).buildLayout(), 0.2f);
+    autoLayout.addLayout(Lookup.getDefault().lookup(YifanHu.class).buildLayout(), 0.6f);
+    autoLayout.addLayout(Lookup.getDefault().lookup(LabelAdjustBuilder.class).buildLayout(), 0.2f);
+    autoLayout.execute();
+
+    // zoom out to the full graph
+    VizController.getInstance().getGraphIO().centerOnGraph();
   }
 }
