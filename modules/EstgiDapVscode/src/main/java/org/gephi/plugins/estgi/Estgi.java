@@ -66,15 +66,30 @@ public class Estgi implements Tool {
 
             @Override
             public void clickNodes(Node[] nodes) {
-              System.out.println("nodes clicked: " + nodes.length);
-              for (Node n : nodes) {
-                System.out.println("  " + n.getId());
-              }
               try {
-                Node n = nodes[0];
+                // WORKAROUND for GEPHI imprecise node selection (which uses float instead of double)
+                //  select the closest node to the current mouse position
+
+                float[] mousePosition = VizController.getInstance().getGraphIO().getMousePosition3d();
+                Node closestNode = null;
+                double closestDistance = Double.MAX_VALUE;
+                System.out.println("nodes clicked: " + nodes.length);
+
+                for (Node n : nodes) {
+                  System.out.println("  " + n.getId());
+                  double xDist = Math.abs(n.x() - mousePosition[0]);
+                  double yDist = Math.abs(n.y() - mousePosition[1]);
+                  double distance = (double) Math.sqrt(xDist * xDist + yDist * yDist);
+                  if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestNode = n;
+                  }
+                }
+                System.out.println("selected closest node: " + closestNode.getId());
+
                 Command.ShowValueEvent cmd = new Command.ShowValueEvent();
                 cmd.event = "showValue";
-                cmd.nodeId = (String)n.getId();
+                cmd.nodeId = (String)closestNode.getId();
                 protocol.encode(graphCommandService.getOutput(), gson.toJson(cmd));
               } catch (Exception ex) {
                   System.out.println("error: " + ex.getMessage());
